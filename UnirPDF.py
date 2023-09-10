@@ -19,16 +19,13 @@ def main():
             widget.grid_configure(padx = 10, pady = 5)
     
     ##Metodo de combinacion##
-    def Unificador(nombre:str):
+    def Unificador():
         ##Comprobar si hay elementos##
-        if len(Archivos) == 0:
-            messagebox.showerror("No hay Archivos","No has agregado o dejado archivos dentro de los archivo que usaras")
-        ##Comprobar si has elegido algun nombre##
-        elif nombre == "":
-            messagebox.showerror("Sin Nombre","Asigne nombre para el nuevo pdf")
+        if len(Archivos) <= 1:
+            messagebox.showerror("No hay Archivos suficientes","No has agregado o dejado archivos necesarios dentro de los archivo que usaras")
         else:
             ##Ruta del archivo final##
-            salida = nombre +".pdf"    
+            salida = filedialog.asksaveasfilename(title="Save PDF", filetypes=[("PDF files", "*.pdf")])+".pdf"
             ##Verificar si ese archivo existe para no sobreescribirlo##
             if not os.path.isdir(salida):
                 ##Funcion de combinar##
@@ -42,7 +39,7 @@ def main():
                         
                     ##Cerrar el pdf##
                     pdf.close()
-                    messagebox.showinfo("Exito", f"El Archivo {nombre}.pdf ha sido creado existosamente")
+                    messagebox.showinfo("Exito", f"El Archivo {os.path.basename(salida)} ha sido creado existosamente")
             else:
                 messagebox.showerror("Archivo existente","El archivo ya existe, cambia el nombre")
             
@@ -104,20 +101,16 @@ def main():
     v.pack()
 
     ##Creacion de Widgets##
-    w = Label(v, text="Nombre Que le colocara al nuevo archivo: ")
-    w.grid(row=0,column=4)
-    entrada = Entry(v)
-    entrada.grid(row=1, column=4)
-    boton = Button(v, text="Crear Archivo", command=lambda:Unificador(entrada.get()))
-    boton.grid(row = 2, column= 4)
     NombresRutas = Text(v)
-    NombresRutas.grid(row=0, column=0, rowspan=3,columnspan=3)
+    NombresRutas.grid(row=0, column=0, columnspan=3)
     Buscador = Button(v, text="Buscar Archivo", command= Buscar)
     Buscador.grid(row = 4, column=0)
     Quitador = Button(v, text="Quitar Archivo", command=FrameQuitar)
     Quitador.grid(row=4, column=1)
     BorrarLista = Button(v, text="Sacar Todo", command=Borrar)
     BorrarLista.grid(row=4, column=2)
+    Crear = Button(v, text="Crear Archivo", command=Unificador)
+    Crear.grid(row = 5, column= 1)
     Actualizar()
     ##Separador de widgets##
     
