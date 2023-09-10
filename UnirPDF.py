@@ -57,32 +57,34 @@ def main():
                 Archivos.append(str(pdf_path))
                 Actualizar()
                 
-    def Quitar(arc:str):
-        ##Verificar si tiene elementos##
-        if len(Archivos) == 0:
-            messagebox.showerror("Vacio","La lista esta vacia")
-        else:
-            for i in range(len(Archivos)):
-                ##Verificar el nombre del archivo este sin su ruta completa##
-                if os.path.basename(Archivos[i]) == arc:
-                    del Archivos[i]
-                    messagebox.showinfo("Eliminado","El archivo con ese nombre ha sido eliminado de la lista")
-                    Actualizar()
-                    break
-                elif i == len(Archivos)-1:
-                    messagebox.showerror("No Encontrado","Ese archivo no estaba en la lista")
-                
     def FrameQuitar():
+        
+        def Quitar(arc:str):
+            ##Verificar si tiene elementos##
+            if len(Archivos) == 0:
+                messagebox.showerror("Vacio","La lista esta vacia")
+            else:
+                for i in range(len(Archivos)):
+                    ##Verificar el nombre del archivo este sin su ruta completa##
+                    if os.path.basename(Archivos[i]) == arc:
+                        del Archivos[i]
+                        messagebox.showinfo("Eliminado","El archivo con ese nombre ha sido eliminado de la lista")
+                        Actualizar()
+                        break
+                    elif i == len(Archivos)-1:
+                        messagebox.showerror("No Encontrado","Ese archivo no estaba en la lista")
+        
         win = Tk()
         win.title("Sacar Archivo")
-        t = Frame(win)
+        win.resizable(0,0)
+        t = Frame(win,background="#4baa92")
         t.pack()
-        Label(t,text="Escribe el nombre exacto del archivo que quieres sacar: ").grid(row = 0, column=0, columnspan=2)
-        sacar = Entry(t)
+        Label(t,text="Escribe el nombre exacto del archivo que quieres sacar: ",background="#4baa92").grid(row = 0, column=0, columnspan=2)
+        sacar = Entry(t,background="#ace3d1")
         sacar.grid(row=1, column=0, columnspan=2)
-        Eliminar = Button(t, text="Sacar", command=lambda:Quitar(sacar.get()))
+        Eliminar = Button(t, text="Sacar", command=lambda:Quitar(sacar.get()), background="#297867", fg="white")
         Eliminar.grid(row =2, column=0)
-        Cerrar = Button(t, text="Cerrar", command=win.destroy)
+        Cerrar = Button(t, text="Cerrar", command=win.destroy, background="#297867", fg="white")
         Cerrar.grid(row=2,column=1)
         for widget in t.winfo_children():
             widget.grid_configure(padx = 10, pady = 5)
@@ -97,19 +99,19 @@ def main():
     box.title("Combinador de PDFs")
 
     ##Creacion del Frame##
-    v = Frame(box)
+    v = Frame(box,background="#4baa92")
     v.pack()
 
     ##Creacion de Widgets##
-    NombresRutas = Text(v)
+    NombresRutas = Text(v,background="#ace3d1")
     NombresRutas.grid(row=0, column=0, columnspan=3)
-    Buscador = Button(v, text="Buscar Archivo", command= Buscar)
+    Buscador = Button(v, text="Buscar Archivo", command= Buscar, background="#297867", fg="white")
     Buscador.grid(row = 4, column=0)
-    Quitador = Button(v, text="Quitar Archivo", command=FrameQuitar)
+    Quitador = Button(v, text="Quitar Archivo", command=FrameQuitar, background="#297867", fg="white")
     Quitador.grid(row=4, column=1)
-    BorrarLista = Button(v, text="Sacar Todo", command=Borrar)
+    BorrarLista = Button(v, text="Sacar Todo", command=Borrar, background="#297867", fg="white")
     BorrarLista.grid(row=4, column=2)
-    Crear = Button(v, text="Crear Archivo", command=Unificador)
+    Crear = Button(v, text="Crear Archivo", command=Unificador, background="#297867", fg="white")
     Crear.grid(row = 5, column= 1)
     Actualizar()
     ##Separador de widgets##
