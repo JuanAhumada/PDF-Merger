@@ -20,7 +20,13 @@ def main():
     
     ##Metodo de combinacion##
     def Unificador(nombre:str):
-        if nombre != "":
+        ##Comprobar si hay elementos##
+        if len(Archivos) == 0:
+            messagebox.showerror("No hay Archivos","No has agregado o dejado archivos dentro de los archivo que usaras")
+        ##Comprobar si has elegido algun nombre##
+        elif nombre == "":
+            messagebox.showerror("Sin Nombre","Asigne nombre para el nuevo pdf")
+        else:
             ##Ruta del archivo final##
             salida = nombre +".pdf"    
             ##Verificar si ese archivo existe para no sobreescribirlo##
@@ -39,24 +45,52 @@ def main():
                     messagebox.showinfo("Exito", f"El Archivo {nombre}.pdf ha sido creado existosamente")
             else:
                 messagebox.showerror("Archivo existente","El archivo ya existe, cambia el nombre")
-        else:
-            messagebox.showerror("Sin Nombre","Asigne nombre para el nuevo pdf")
+            
 
     def Buscar():
-        global Archivosstr
         ##Buscador de archivos##
         file_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
         pdf_path = os.path.abspath(file_path)
+        ##Prevenir que a la lista entren carpetas##
         if pdf_path[-4:] == ".pdf":
+            ##Revisar si ya esta en la lista##
             if str(pdf_path) in Archivos:
                 messagebox.showerror("Archivo existente","El archivo ya esta en la lista")
             else:
                 Archivos.append(str(pdf_path))
                 Actualizar()
                 
-    def Quitar():
-        pass
-    
+    def Quitar(arc:str):
+        ##Verificar si tiene elementos##
+        if len(Archivos) == 0:
+            messagebox.showerror("Vacio","La lista esta vacia")
+        else:
+            for i in range(len(Archivos)):
+                ##Verificar el nombre del archivo este sin su ruta completa##
+                if os.path.basename(Archivos[i]) == arc:
+                    del Archivos[i]
+                    messagebox.showinfo("Eliminado","El archivo con ese nombre ha sido eliminado de la lista")
+                    Actualizar()
+                    break
+                elif i == len(Archivos)-1:
+                    messagebox.showerror("No Encontrado","Ese archivo no estaba en la lista")
+                
+    def FrameQuitar():
+        win = Tk()
+        win.title("Sacar Archivo")
+        t = Frame(win)
+        t.pack()
+        Label(t,text="Escribe el nombre exacto del archivo que quieres sacar: ").grid(row = 0, column=0, columnspan=2)
+        sacar = Entry(t)
+        sacar.grid(row=1, column=0, columnspan=2)
+        Eliminar = Button(t, text="Sacar", command=lambda:Quitar(sacar.get()))
+        Eliminar.grid(row =2, column=0)
+        Cerrar = Button(t, text="Cerrar", command=win.destroy)
+        Cerrar.grid(row=2,column=1)
+        for widget in t.winfo_children():
+            widget.grid_configure(padx = 10, pady = 5)
+        win.mainloop()
+
     def Borrar():
         Archivos.clear()
         Actualizar()
@@ -80,7 +114,7 @@ def main():
     NombresRutas.grid(row=0, column=0, rowspan=3,columnspan=3)
     Buscador = Button(v, text="Buscar Archivo", command= Buscar)
     Buscador.grid(row = 4, column=0)
-    Quitador = Button(v, text="Quitar Archivo", command=Quitar)
+    Quitador = Button(v, text="Quitar Archivo", command=FrameQuitar)
     Quitador.grid(row=4, column=1)
     BorrarLista = Button(v, text="Sacar Todo", command=Borrar)
     BorrarLista.grid(row=4, column=2)
